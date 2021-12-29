@@ -2,7 +2,8 @@ from abc import ABC, abstractmethod
 
 class DynamicTree(ABC):
  
-    def __init__(self):
+    def __init__(self, root):
+        self.root = root
         super().__init__()
     
     @abstractmethod
