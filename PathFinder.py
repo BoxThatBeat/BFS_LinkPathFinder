@@ -2,18 +2,21 @@ import argparse
 from queue import Queue
 
 from DynamicTree import DynamicTree
-from SteamTree import SteamTree
+from SteamApiTree import SteamApiTree
+from SteamWebTree import SteamWebTree
 from TestTree import TestTree
+import time
 
 
 def arg_setup():
 
     parser = argparse.ArgumentParser(description="A program that takes a Facebook profile source and goal and determines the shortest link clicks to get from source to goal through friend lists.")
-    parser.add_argument("source_profile", metavar="source_profile", type=str, help="The source Facebook profile URL")
-    parser.add_argument("target_profile", metavar="target_profile", type=str, help="The target Facebook profile URL")
+    parser.add_argument("source_profile", metavar="source_profile", type=str, help="The source Steam profile URL or steam_id in the case of providing a Steam API key")
+    parser.add_argument("target_profile", metavar="target_profile", type=str, help="The target Steam profile URL or steam_id in the case of providing a Steam API key")
+    parser.add_argument("-api_key", metavar="api_key", type=str, help="An optional Steam api key that will enable the use of Steam's API for faster run time.")
     return parser.parse_args()
 
-def create_path_to_goal(super_map, root, target) -> list:
+def create_path_to_goal(dynamic_tree: DynamicTree, super_map, root, target) -> list:
     """
     Uses the supermap which has enteries of subnode to it's super node to create the path from root to target node
     returns such path as a list
@@ -23,7 +26,8 @@ def create_path_to_goal(super_map, root, target) -> list:
     while path[-1] != root:
         path.append(super_map[path[-1]])
     path.reverse()
-    return path
+
+    return dynamic_tree.format_output(path)
 
 def breadth_first_search(dynamic_tree: DynamicTree, target_node) -> list:
     """
@@ -40,9 +44,9 @@ def breadth_first_search(dynamic_tree: DynamicTree, target_node) -> list:
     while search_queue:
         node = search_queue.get()
 
-        print(node)
+        #print(node)
         if node == target_node:
-            return create_path_to_goal(super_map, root_node, target_node)
+            return create_path_to_goal(dynamic_tree, super_map, root_node, target_node)
 
         for sub_node in dynamic_tree.get_sub_nodes(node):
             if not sub_node in visited:
@@ -63,17 +67,31 @@ def find_path(dynamic_tree: DynamicTree, target_node):
     path_to_target = breadth_first_search(dynamic_tree, target_node)
 
     print("Search complete")
-    print(f"Target is {len(path_to_target)} friends away from source profile. With friend path of:")
+    print(f"Target is {len(path_to_target) - 1} friends away from source profile. With friend path of:")
     print(path_to_target)
 
 
 def main():
     print("Running Link Path Finder")
     
-
+    
     args = arg_setup()
-    find_path(SteamTree(args.source_profile), args.target_profile)
-    #find_path(TestTree('root'), 'F1')
+
+    if args.api_key:
+        print("Finding friend path using api:")
+        start = time.time()
+        find_path(SteamApiTree(args.source_profile, args.api_key), args.target_profile)
+        end = time.time()
+        print(f"Search took {end - start} seconds.")
+    
+    else:
+        print("Finding friend path using web scraping:")
+        start = time.time()
+        find_path(SteamWebTree(args.source_profile), args.target_profile)
+        end = time.time()
+        print(f"Search took {end - start} seconds.")
+
+    #find_path(TestTree("root"), "F2")
 
 
 

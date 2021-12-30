@@ -37,4 +37,7 @@ class TestTree(DynamicTree):
         """
 
         return self.tree[node]
+
+    def format_output(self, path) -> list:
+        return path
      

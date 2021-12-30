@@ -14,9 +14,16 @@ class DynamicTree(ABC):
         pass
 
     @abstractmethod
-    def get_sub_nodes(self, node)-> list:
+    def get_sub_nodes(self, node) -> list:
         """
         Returns a list of child nodes
         Returns an empty list if none exist
+        """
+        pass
+
+    @abstractmethod
+    def format_output(self, path) -> list:
+        """
+        Takes the path output list and formats it to make sense given the input for this 'tree'
         """
         pass
