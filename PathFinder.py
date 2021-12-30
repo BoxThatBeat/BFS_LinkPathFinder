@@ -2,7 +2,14 @@ import argparse
 from queue import Queue
 
 from DynamicTree import DynamicTree
+from SteamTree import SteamTree
 from TestTree import TestTree
+from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+import requests
+import json
 
 def arg_setup():
 
@@ -38,6 +45,7 @@ def breadth_first_search(dynamic_tree: DynamicTree, target_node) -> list:
     while search_queue:
         node = search_queue.get()
 
+        print(node)
         if node == target_node:
             return create_path_to_goal(super_map, root_node, target_node)
 
@@ -54,19 +62,25 @@ def breadth_first_search(dynamic_tree: DynamicTree, target_node) -> list:
                 
 
 
-def test_BFS(source_node, target_node):
-    
-    path_to_target = breadth_first_search(TestTree(source_node), target_node)
+def find_path(dynamic_tree: DynamicTree, target_node):
+
+    print(f"Begining search for {target_node}")
+    path_to_target = breadth_first_search(dynamic_tree, target_node)
+
+    print("Search complete")
+    print(f"Target is {len(path_to_target)} friends away from source profile. With friend path of:")
     print(path_to_target)
-    
+
 
 def main():
-    #test_BFS('root', 'F1')
+    print("Running Link Path Finder")
     
-    args = arg_setup()
-    test_BFS(args.source_profile, args.target_profile)
 
-    
+    args = arg_setup()
+    find_path(SteamTree(args.source_profile), args.target_profile)
+    #find_path(TestTree('root'), 'F1')
+
+
 
 if __name__ == "__main__":
     main()
