@@ -1,2 +1,2 @@
-# BFS path finder
-A short challenge I made for myself, using my web scraping experience and knowledge of algorithms to determine an objective on different websites. In this project I use BFS to find how many friends are between a Steam user and another. Also tried using BFS on wikipedia links.
+# project_fb
+A short challenge I made for myself, using my web scraping experience and knowledge of algorithms to determine an objective on Facebook. That objective is to determine the minimum number of friends lists it takes to get from a given start profile to a given target profile. For example, how many friends of friends would it take to get from my profile to a celebrity's profile. 

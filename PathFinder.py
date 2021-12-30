@@ -4,12 +4,7 @@ from queue import Queue
 from DynamicTree import DynamicTree
 from SteamTree import SteamTree
 from TestTree import TestTree
-from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-import requests
-import json
+
 
 def arg_setup():
 
